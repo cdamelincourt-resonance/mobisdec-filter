@@ -1,8 +1,9 @@
 name: Filter MobiSDEC CSV
 
 on:
-  schedule:
-    - cron: '0 4 * * *'  # workflow_dispatch:  # Permet de lancer manuellement depuis l'interface GitHub
+  workflow_dispatch: #schedule:
+    # - cron: '0 4 * * *'
+
 
 jobs:
   filter-and-save:
