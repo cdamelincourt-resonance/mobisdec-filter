@@ -20,7 +20,7 @@ jobs:
         run: pip install pandas requests
 
       - name: Run filter script
-        run: python filter_mobisdec.py
+        run: python script.py
 
       - name: Upload filtered CSV as artifact
         uses: actions/upload-artifact@v4
