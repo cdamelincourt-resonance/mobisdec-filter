@@ -1,37 +1,4 @@
-name: Filter MobiSDEC CSV
-
-on:
-  schedule:
-    - cron: '0 4 * * *'  # Tous les jours à 4h du matin
-  workflow_dispatch:
-
-jobs:
-  run-script:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install requests
-
-      - name: Run script
-        run: python script.py
-
-      - name: Commit filtered CSV
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
-          git add output/*.csv
-          git commit -m "Add filtered CSV for $(date +'%Y-%m-%d')" || echo "No changes to commit"
-          git pull --rebase
-          git push origin HEAD:main
+csv_url: "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435"
+filter:
+  nom_enseigne: "MobiSDEC"
+zapier_webhook: "https://hooks.zapier.com/hooks/catch/25244139/ustsv4r/"
