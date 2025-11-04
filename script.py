@@ -1,28 +1,13 @@
 import pandas as pd
-import requests
-import yaml
-import os
 
-# Chemin vers le fichier YAML dans .github/workflows/
-yaml_path = os.path.join(".github", "workflows", "filter.yml")
+# URL du fichier CSV
+url = "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435"
 
-# Charger les paramètres
-with open(yaml_path, "r") as f:
-    config = yaml.safe_load(f)
+# Lire le CSV directement depuis l'URL
+df = pd.read_csv(url, sep=';', low_memory=False)
 
-# Télécharger le CSV
-csv_url = config["csv_url"]
-df = pd.read_csv(csv_url)
+# Filtrer les lignes où nom_enseigne == "MobiSDEC"
+filtered_df = df[df['nom_enseigne'] == 'MobiSDEC']
 
-# Filtrer les données
-filtered_df = df[df["nom_enseigne"] == config["filter"]["nom_enseigne"]]
-
-# Convertir en dictionnaire
-data = filtered_df.to_dict(orient="records")
-
-# Envoyer à Zapier
-webhook_url = config["zapier_webhook"]
-response = requests.post(webhook_url, json={"data": data})
-
-# Afficher le statut
-print(f"Webhook status: {response.status_code}")
+# Sauvegarder le résultat dans un nouveau fichier CSV
+filtered_df.to_csv("mobisdec_filtré.csv", index=False)
