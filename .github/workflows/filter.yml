@@ -27,3 +27,7 @@ jobs:
         with:
           name: mobisdec-filtré
           path: mobisdec_filtré.csv
+
+      - name: Send CSV to Zapier
+        run: |
+          curl -X POST -F "file=@mobisdec_filtré.csv" https://hooks.zapier.com/hooks/catch/25244139/ushmo05/
