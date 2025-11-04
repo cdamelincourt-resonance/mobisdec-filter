@@ -5,7 +5,7 @@ import requests
 from io import StringIO
 
 # URL du fichier source CSV
-CSV_URL = "https://www.data.gouv.fr/fr/datasets/r/7a4e5e2e-0c3e-4a3c-8b4e-9f3a4c9f6f4b"
+CSV_URL = "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435"
 
 # URL du webhook Zapier
 ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/25244139/ustsv4r/"
