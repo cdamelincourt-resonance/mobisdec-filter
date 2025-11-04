@@ -1,8 +1,8 @@
 name: Filter MobiSDEC CSV
 
 on:
-  workflow_dispatch: #schedule:
-    # - cron: '0 4 * * *'
+  schedule: #workflow_dispatch: #
+    - cron: '0 4 * * *'
 
 
 jobs:
