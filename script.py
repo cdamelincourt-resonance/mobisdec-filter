@@ -1,10 +1,13 @@
 import pandas as pd
 import requests
 import yaml
-import json
+import os
 
-# Charger les paramètres depuis filter.yml
-with open("filter.yml", "r") as f:
+# Chemin vers le fichier YAML dans .github/workflows/
+yaml_path = os.path.join(".github", "workflows", "filter.yml")
+
+# Charger les paramètres
+with open(yaml_path, "r") as f:
     config = yaml.safe_load(f)
 
 # Télécharger le CSV
