@@ -1,11 +1,22 @@
-import pandas as pd
+name: Filter MobiSDEC CSV
 
-# Télécharger le fichier CSV
-url = "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435"
-df = pd.read_csv(url, sep=';', low_memory=False)
+on:
+  workflow_dispatch:  # Permet à Zapier de déclencher manuellement
 
-# Filtrer les lignes
-filtered_df = df[df['nom_enseigne'] == 'MobiSDEC']
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-# Enregistrer le fichier filtré
-filtered_df.to_csv("mobisdec_filtré.csv", index=False)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run script
+        run: python filter_mobisdec.py
