@@ -23,7 +23,7 @@ jobs:
         run: python filter_mobisdec.py
 
       - name: Upload filtered CSV as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mobisdec-filtré
           path: mobisdec_filtré.csv
