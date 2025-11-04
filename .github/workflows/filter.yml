@@ -1,4 +1,29 @@
-csv_url: "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435"
-filter:
-  nom_enseigne: "MobiSDEC"
-zapier_webhook: "https://hooks.zapier.com/hooks/catch/25244139/ustsv4r/"
+name: Filter MobiSDEC CSV
+
+on:
+  workflow_dispatch:  # Permet de lancer manuellement
+
+jobs:
+  filter-and-save:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Run filter script
+        run: python filter_mobisdec.py
+
+      - name: Upload filtered CSV as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: mobisdec-filtré
+          path: mobisdec_filtré.csv
