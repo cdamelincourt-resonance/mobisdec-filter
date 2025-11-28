@@ -1,6 +1,7 @@
 name: Filter MobiSDEC CSV
 
 on:
+  workflow_dispatch:   # permet de lancer manuellement
   schedule: #workflow_dispatch: #
     - cron: '0 4 * * *'
 
@@ -33,4 +34,4 @@ jobs:
       - name: Send CSV to Zapier
         run: |
           curl -X POST -F "file=@mobisdec_filtré.csv" https://a7adbb51d943e1b0b4ff2f51b09d36.f9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/76208c4c965c4b5db53554d3ca2e6381/triggers/manual/paths/invoke?api-version=1
-          
+        # https://hooks.zapier.com/hooks/catch/25244139/ushmo05/
