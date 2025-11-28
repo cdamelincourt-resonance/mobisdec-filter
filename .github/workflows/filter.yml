@@ -2,9 +2,8 @@ name: Filter MobiSDEC CSV
 
 on:
   workflow_dispatch:   # permet de lancer manuellement
-  schedule: #workflow_dispatch: #
-    - cron: '0 4 * * *'
-
+  schedule:
+    - cron: '0 4 * * *'   # exécution quotidienne à 4h du matin
 
 jobs:
   filter-and-save:
@@ -13,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # nécessaire pour pouvoir pousser des commits
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,13 +26,15 @@ jobs:
       - name: Run filter script
         run: python script.py
 
-      - name: Upload filtered CSV as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mobisdec-filtré
-          path: mobisdec_filtré.csv
-
-      - name: Send CSV to Zapier
+      - name: Move filtered CSV to repo folder
         run: |
-          curl -X POST -F "file=@mobisdec_filtré.csv" https://a7adbb51d943e1b0b4ff2f51b09d36.f9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/76208c4c965c4b5db53554d3ca2e6381/triggers/manual/paths/invoke?api-version=1
-        # https://hooks.zapier.com/hooks/catch/25244139/ushmo05/
+          mkdir -p data
+          mv mobisdec_filtré.csv data/mobisdec_filtré.csv
+
+      - name: Commit and push filtered CSV
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add data/mobisdec_filtré.csv
+          git commit -m "Update filtered CSV"
+          git push
