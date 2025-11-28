@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 4 * * *'   # exécution quotidienne à 4h du matin
 
+permissions:
+  contents: write   # autorise le workflow à pousser des commits
+
 jobs:
   filter-and-save:
     runs-on: ubuntu-latest
@@ -13,7 +16,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0   # nécessaire pour pouvoir pousser des commits
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}   # utilise le token GitHub Actions
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -29,12 +33,14 @@ jobs:
       - name: Move filtered CSV to repo folder
         run: |
           mkdir -p data
-          mv mobisdec_filtré.csv data/mobisdec_filtré.csv
+          mv mobisdec_filtré.csv data/mobisdec_filtre.csv
 
       - name: Commit and push filtered CSV
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-          git add data/mobisdec_filtré.csv
-          git commit -m "Update filtered CSV"
+          git add data/mobisdec_filtre.csv
+          git commit -m "Update filtered CSV" || echo "No changes to commit"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
